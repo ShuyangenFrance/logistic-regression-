@@ -9,18 +9,18 @@ import numpy as np
 
 class Logregre:
     
-    def __init__(self,DataMat,ClassLabel,alpha):
-        self.DataMat=DataMat
-        self.ClassLabel=ClassLabel
+    def __init__(self,DataMat,ClassLabel,alpha):  #initialize the data 
+        self.DataMat=DataMat   #the matrix X
+        self.ClassLabel=ClassLabel # the matrix Y as lables 0 or 1 
         self.DataMatrix= np.mat(DataMat)
         self.LabelMatrix=np.mat(self.ClassLabel).transpose()
         self.alpha=alpha
 
-    def sigmoid(self,inX): #sigmoid function 
+    def sigmoid(self,inX): # define sigmoid function 
         return 1.0/(1+np.exp(-inX)) 
 
 
-    def gradAscent(self):
+    def gradAscent(self): #update the weights by computing  the gradient descent
         m,n = np.shape(self.DataMatrix)
         weights = np.ones((n,1))
         weights0 = np.ones((n,1))
@@ -32,11 +32,11 @@ class Logregre:
                 weights0=weights
                 h = self.sigmoid(self.DataMatrix*weights)  
                 error = h-self.LabelMatrix
-                weights = weights -self.alpha * self.DataMatrix.transpose()* error
+                weights = weights -self.alpha * self.DataMatrix.transpose()* error 
                 beta=np.sum(np.abs(weights0-weights))
         return weights
 
-    def plotBestFit(self):
+    def plotBestFit(self): #plot the classifier
         import matplotlib.pyplot as plt
         wei=self.gradAscent()
         weights = np.asarray(wei)
@@ -60,8 +60,8 @@ class Logregre:
         plt.plot(x, y,c='black')
         
 
-######Test###########
-alpha=0.001
+######Test on the dataset ###########
+alpha=0.001 
 dataMat = []; labelMat = []
 fr = open('dataset.txt')
 for line in fr.readlines():
