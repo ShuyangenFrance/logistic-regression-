@@ -25,7 +25,7 @@ class Logregre:
         weights = np.ones((n,1))
         weights0 = np.ones((n,1))
         beta=1
-        for i in range(500):
+        for i in range(700):
             if beta<10^(-3):
                 break
             else:
@@ -35,10 +35,24 @@ class Logregre:
                 weights = weights -self.alpha * self.DataMatrix.transpose()* error 
                 beta=np.sum(np.abs(weights0-weights))
         return weights
+    
+    def stograAscent(self,numberit):
+        m,n= np.shape(self.DataMatrix)
+        weights= np.ones((n,1))
+        for j in range(numberit):
+            for i in range(m):
+                alpha= 4/(1.0+j+i)+0.01
+                randomindex= np.random.randint(0,m)
+                h=self.sigmoid(self.DataMatrix[randomindex]*weights)  
+                error= h - self.LabelMatrix[randomindex]
+                weights = weights -self.DataMatrix[randomindex].transpose()* error 
+        return weights
+                
+                
 
     def plotBestFit(self): #plot the classifier
         import matplotlib.pyplot as plt
-        wei=self.gradAscent()
+        wei=self.stograAscent(120)
         weights = np.asarray(wei)
         dataArr = np.array(self.DataMat)
         n = np.shape(dataArr)[0]
@@ -69,4 +83,5 @@ for line in fr.readlines():
     dataMat.append([1.0, float(lineArr[0]), float(lineArr[1])])
     labelMat.append(int(lineArr[2]))
 g=Logregre(dataMat,labelMat,alpha)
+
 g.plotBestFit()
